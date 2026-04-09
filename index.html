@@ -198,6 +198,49 @@
 
     <script>
         const REPO = "aquawill/ocm-bridge-server-releases";
+        const RELEASE_PAGE = `https://github.com/${REPO}/releases/latest`;
+
+        function renderContainerCard() {
+            return `
+                <div class="download-card" style="flex-direction:column;align-items:stretch;gap:14px;">
+                    <div style="display:flex;align-items:center;gap:20px;">
+                        <div class="platform-icon">🐧</div>
+                        <div class="download-info">
+                            <h3>Linux / Container</h3>
+                            <p>Docker or Podman — any x64 host</p>
+                        </div>
+                    </div>
+                    <div style="background:#0d1820;border:1px solid #1e3a4a;border-radius:8px;padding:14px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#4db8d1;position:relative;line-height:1.7;">
+                        <span style="color:#667788;user-select:none;">$</span> docker pull ghcr.io/aquawill/ocm-python-bridge:latest<br>
+                        <span style="color:#667788;user-select:none;">$</span> docker run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest
+                        <br><br>
+                        <span style="color:#556677;font-size:12px;"># or use podman:</span><br>
+                        <span style="color:#667788;user-select:none;">$</span> podman pull ghcr.io/aquawill/ocm-python-bridge:latest<br>
+                        <span style="color:#667788;user-select:none;">$</span> podman run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest
+                        <button onclick="navigator.clipboard.writeText('docker pull ghcr.io/aquawill/ocm-python-bridge:latest && docker run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest')" style="position:absolute;top:10px;right:10px;background:#1e3a4a;border:none;color:#8899aa;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px;" title="Copy docker commands">Copy</button>
+                    </div>
+                </div>`;
+        }
+
+        function renderCards(container, { macUrl, macSize, winUrl, winSize }) {
+            container.innerHTML = `
+                <div class="download-card">
+                    <div class="platform-icon">🍎</div>
+                    <div class="download-info">
+                        <h3>macOS (Apple Silicon)</h3>
+                        <p>${macSize}</p>
+                    </div>
+                    <a href="${macUrl}" class="download-btn">Download</a>
+                </div>
+                <div class="download-card">
+                    <div class="platform-icon">🪟</div>
+                    <div class="download-info">
+                        <h3>Windows (x64)</h3>
+                        <p>${winSize}</p>
+                    </div>
+                    <a href="${winUrl}" class="download-btn">Download</a>
+                </div>` + renderContainerCard();
+        }
 
         async function loadRelease() {
             const container = document.getElementById("downloads");
@@ -205,71 +248,33 @@
 
             try {
                 const resp = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`);
-                if (!resp.ok) throw new Error("No releases found");
+                if (!resp.ok) throw new Error("API unavailable");
                 const release = await resp.json();
+                // Guard against rate-limit JSON (has "message" key, no "tag_name")
+                if (!release.tag_name) throw new Error("Unexpected response");
 
                 badge.textContent = `Latest: ${release.tag_name}`;
 
                 const macAsset = release.assets.find(a => a.name.includes("macOS") && a.name.endsWith(".dmg"));
                 const winAsset = release.assets.find(a => a.name.includes("Windows") && a.name.endsWith(".exe"));
 
-                container.innerHTML = "";
-
-                // macOS card
-                const macUrl = macAsset ? macAsset.browser_download_url : "#";
-                const macSize = macAsset ? `DMG · ${(macAsset.size / 1048576).toFixed(0)} MB` : "Not available yet";
-                const macClass = macAsset ? "download-btn" : "download-btn disabled";
-                container.innerHTML += `
-                    <div class="download-card">
-                        <div class="platform-icon">🍎</div>
-                        <div class="download-info">
-                            <h3>macOS (Apple Silicon)</h3>
-                            <p>${macSize}</p>
-                        </div>
-                        <a href="${macUrl}" class="${macClass}">Download</a>
-                    </div>`;
-
-                // Windows card
-                const winUrl = winAsset ? winAsset.browser_download_url : "#";
-                const winSize = winAsset ? `Installer · ${(winAsset.size / 1048576).toFixed(0)} MB` : "Not available yet";
-                const winClass = winAsset ? "download-btn" : "download-btn disabled";
-                container.innerHTML += `
-                    <div class="download-card">
-                        <div class="platform-icon">🪟</div>
-                        <div class="download-info">
-                            <h3>Windows (x64)</h3>
-                            <p>${winSize}</p>
-                        </div>
-                        <a href="${winUrl}" class="${winClass}">Download</a>
-                    </div>`;
-
-                // Linux / Container card — inline pull command
-                container.innerHTML += `
-                    <div class="download-card" style="flex-direction:column;align-items:stretch;gap:14px;">
-                        <div style="display:flex;align-items:center;gap:20px;">
-                            <div class="platform-icon">🐧</div>
-                            <div class="download-info">
-                                <h3>Linux / Container</h3>
-                                <p>Docker or Podman — any x64 host</p>
-                            </div>
-                        </div>
-                        <div style="background:#0d1820;border:1px solid #1e3a4a;border-radius:8px;padding:14px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#4db8d1;position:relative;line-height:1.7;">
-                            <span style="color:#667788;user-select:none;">$</span> docker pull ghcr.io/aquawill/ocm-python-bridge:latest<br>
-                            <span style="color:#667788;user-select:none;">$</span> docker run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest
-                            <br><br>
-                            <span style="color:#556677;font-size:12px;"># or use podman:</span><br>
-                            <span style="color:#667788;user-select:none;">$</span> podman pull ghcr.io/aquawill/ocm-python-bridge:latest<br>
-                            <span style="color:#667788;user-select:none;">$</span> podman run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest
-                            <button onclick="navigator.clipboard.writeText('docker pull ghcr.io/aquawill/ocm-python-bridge:latest && docker run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest')" style="position:absolute;top:10px;right:10px;background:#1e3a4a;border:none;color:#8899aa;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px;" title="Copy docker commands">Copy</button>
-                        </div>
-                    </div>`;
+                renderCards(container, {
+                    macUrl:  macAsset ? macAsset.browser_download_url : RELEASE_PAGE,
+                    macSize: macAsset ? `DMG · ${(macAsset.size / 1048576).toFixed(0)} MB` : "See release page",
+                    winUrl:  winAsset ? winAsset.browser_download_url : RELEASE_PAGE,
+                    winSize: winAsset ? `Installer · ${(winAsset.size / 1048576).toFixed(0)} MB` : "See release page",
+                });
 
             } catch (e) {
-                badge.textContent = "No releases yet";
-                container.innerHTML = `
-                    <div class="loading">
-                        No releases available yet. Check back soon!
-                    </div>`;
+                // Fallback: API rate-limited or unavailable — use static links
+                badge.textContent = "";
+                badge.style.display = "none";
+                renderCards(container, {
+                    macUrl:  RELEASE_PAGE,
+                    macSize: "DMG · see release page for details",
+                    winUrl:  RELEASE_PAGE,
+                    winSize: "Installer · see release page for details",
+                });
             }
         }
 
