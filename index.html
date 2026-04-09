@@ -242,15 +242,25 @@
                         <a href="${winUrl}" class="${winClass}">Download</a>
                     </div>`;
 
-                // Linux / Container card
+                // Linux / Container card — inline pull command
                 container.innerHTML += `
-                    <div class="download-card">
-                        <div class="platform-icon">🐧</div>
-                        <div class="download-info">
-                            <h3>Linux (Container)</h3>
-                            <p>Podman / Docker</p>
+                    <div class="download-card" style="flex-direction:column;align-items:stretch;gap:14px;">
+                        <div style="display:flex;align-items:center;gap:20px;">
+                            <div class="platform-icon">🐧</div>
+                            <div class="download-info">
+                                <h3>Linux / Container</h3>
+                                <p>Docker or Podman — any x64 host</p>
+                            </div>
                         </div>
-                        <a href="https://github.com/aquawill/ocm-bridge-server-releases/blob/main/CONTAINER.md" class="download-btn">Guide</a>
+                        <div style="background:#0d1820;border:1px solid #1e3a4a;border-radius:8px;padding:14px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#4db8d1;position:relative;line-height:1.7;">
+                            <span style="color:#667788;user-select:none;">$</span> docker pull ghcr.io/aquawill/ocm-python-bridge:latest<br>
+                            <span style="color:#667788;user-select:none;">$</span> docker run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest
+                            <br><br>
+                            <span style="color:#556677;font-size:12px;"># or use podman:</span><br>
+                            <span style="color:#667788;user-select:none;">$</span> podman pull ghcr.io/aquawill/ocm-python-bridge:latest<br>
+                            <span style="color:#667788;user-select:none;">$</span> podman run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest
+                            <button onclick="navigator.clipboard.writeText('docker pull ghcr.io/aquawill/ocm-python-bridge:latest && docker run --rm -p 5000:5000 -v ~/.here:/root/.here ghcr.io/aquawill/ocm-python-bridge:latest')" style="position:absolute;top:10px;right:10px;background:#1e3a4a;border:none;color:#8899aa;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px;" title="Copy docker commands">Copy</button>
+                        </div>
                     </div>`;
 
             } catch (e) {
