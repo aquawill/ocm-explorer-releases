@@ -151,6 +151,70 @@
             left: 0;
             color: #4db8d1;
         }
+        .changelog {
+            margin-bottom: 32px;
+        }
+        .changelog h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .changelog-entry {
+            background: #162530;
+            border: 1px solid #1e3a4a;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 12px;
+        }
+        .changelog-entry summary {
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .changelog-entry summary::-webkit-details-marker { display: none; }
+        .changelog-entry summary::before {
+            content: "▸";
+            color: #4db8d1;
+            font-size: 12px;
+            transition: transform 0.2s;
+        }
+        .changelog-entry[open] summary::before {
+            transform: rotate(90deg);
+        }
+        .changelog-entry .ver-tag {
+            font-size: 15px;
+            font-weight: 600;
+            color: #4db8d1;
+        }
+        .changelog-entry .ver-date {
+            font-size: 12px;
+            color: #667788;
+        }
+        .changelog-entry .ver-body {
+            margin-top: 14px;
+            padding-left: 18px;
+            border-left: 2px solid #1e3a4a;
+        }
+        .changelog-entry .cat {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 10px 0 6px;
+            color: #8899aa;
+        }
+        .changelog-entry .cat:first-child { margin-top: 0; }
+        .changelog-entry .cat-feat { color: #56d6a0; }
+        .changelog-entry .cat-fix  { color: #e5c07b; }
+        .changelog-entry .commit-item {
+            font-size: 13px;
+            color: #b0b8c4;
+            padding: 3px 0;
+            line-height: 1.5;
+        }
         .footer {
             text-align: center;
             font-size: 12px;
@@ -194,6 +258,103 @@
                 <li>The app runs a local server and opens your browser automatically</li>
             </ul>
         </div>
+
+        <!-- %%CHANGELOG_START%% -->
+        <div class="changelog">
+            <h2>Changelog</h2>
+
+            <details class="changelog-entry" open>
+                <summary>
+                    <span class="ver-tag">v1.0.7</span>
+                    <span class="ver-date">2026-04-10</span>
+                </summary>
+                <div class="ver-body">
+                    <div class="cat cat-feat">Features</div>
+                    <div class="commit-item">Bridge: extract EmitCanonicalSegmentLayer + add RoutingCanonicalSegment-14</div>
+                    <div class="commit-item">Bridge: emit IsaTruckCanonicalSegment-14 via unified template</div>
+                    <div class="commit-item">Bridge: emit TruckCanonicalSegment-14 via unified template</div>
+                    <div class="cat cat-fix">Fixes</div>
+                    <div class="commit-item">Fix isa_truck feature reading nonexistent count keys</div>
+                    <div class="commit-item">Expand bitmasks in canonical-split layers</div>
+                    <div class="cat">Other</div>
+                    <div class="commit-item">Add Phase D handoff docs and regression script</div>
+                </div>
+            </details>
+
+            <details class="changelog-entry">
+                <summary>
+                    <span class="ver-tag">v1.0.5</span>
+                    <span class="ver-date">2026-04-10</span>
+                </summary>
+                <div class="ver-body">
+                    <div class="cat cat-fix">Fixes</div>
+                    <div class="commit-item">Fix Windows bridge subprocess encoding — add <code>encoding="utf-8"</code> to all Popen/run calls</div>
+                </div>
+            </details>
+
+            <details class="changelog-entry">
+                <summary>
+                    <span class="ver-tag">v1.0.4</span>
+                    <span class="ver-date">2026-04-10</span>
+                </summary>
+                <div class="ver-body">
+                    <div class="cat cat-feat">Features</div>
+                    <div class="commit-item">Add tray / menu-bar log viewer and fix Windows daemon IPC</div>
+                </div>
+            </details>
+
+            <details class="changelog-entry">
+                <summary>
+                    <span class="ver-tag">v1.0.3</span>
+                    <span class="ver-date">2026-04-10</span>
+                </summary>
+                <div class="ver-body">
+                    <div class="cat cat-fix">Fixes</div>
+                    <div class="commit-item">Fix Windows: bridge daemon IPC broken by selectors incompatibility</div>
+                </div>
+            </details>
+
+            <details class="changelog-entry">
+                <summary>
+                    <span class="ver-tag">v1.0.2</span>
+                    <span class="ver-date">2026-04-09</span>
+                </summary>
+                <div class="ver-body">
+                    <div class="cat cat-fix">Fixes</div>
+                    <div class="commit-item">Fix Windows: suppress console windows from bridge subprocess calls</div>
+                </div>
+            </details>
+
+            <details class="changelog-entry">
+                <summary>
+                    <span class="ver-tag">v1.0.0</span>
+                    <span class="ver-date">2026-04-09</span>
+                </summary>
+                <div class="ver-body">
+                    <div class="cat cat-feat">Features</div>
+                    <div class="commit-item">Desktop app: macOS DMG + Windows installer with auto-release CI</div>
+                    <div class="commit-item">System tray / menu bar with Dock icon, random port, and server-ready polling</div>
+                    <div class="commit-item">Offline routing: TurnCost layer with N×N turn matrix visualisation</div>
+                    <div class="commit-item">Bridge daemon with IPC, offline fallback, and cache volume splitting</div>
+                    <div class="commit-item">ADAS layer: metre-offset geometry, camelCase JSON, and 3D panel</div>
+                    <div class="commit-item">Landmarks layer group with 3D model viewer and KTX→PNG texture conversion</div>
+                    <div class="commit-item">Realistic View: Junction View / Sign compositing (A2DGS day/night)</div>
+                    <div class="commit-item">Truck layer group and CVR support</div>
+                    <div class="commit-item">Tile key search, Link ID / Segment Ref lookup via PDEV8 API</div>
+                    <div class="commit-item">Container image: Docker / Podman support with Rosetta guide for Apple Silicon</div>
+                    <div class="cat cat-fix">Fixes</div>
+                    <div class="commit-item">Fix PyInstaller Pillow submodule collection for landmark textures</div>
+                    <div class="commit-item">Fix 3D landmark texture decoding, L17 batch fetch, and resource leaks</div>
+                    <div class="commit-item">Fix landmark overlay persistence on zoom-out and cache dir permissions</div>
+                    <div class="commit-item">Fix macOS build: snappy dependency and Homebrew CMAKE_PREFIX_PATH</div>
+                    <div class="cat">Other</div>
+                    <div class="commit-item">Rename project from ocm-python-bridge / OCM Tile Inspector → OCM Explorer</div>
+                    <div class="commit-item">Improved info panel, rendering performance, and feature toggle unification</div>
+                </div>
+            </details>
+
+        </div>
+        <!-- %%CHANGELOG_END%% -->
 
         <div class="footer">
             <a href="https://github.com/aquawill/ocm-explorer-releases/issues/new?template=bug_report.md">Report a bug</a> · <a href="https://github.com/aquawill/ocm-explorer-releases/issues/new?template=feature_request.md">Request a feature</a><br>
