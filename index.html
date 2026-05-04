@@ -265,6 +265,25 @@
 
             <details class="changelog-entry" open>
                 <summary>
+                    <span class="ver-tag">v1.1.3</span>
+                    <span class="ver-date">2026-05-04</span>
+                </summary>
+                <div class="ver-body">
+                    <div class="cat cat-feat">Features</div>
+                    <div class="commit-item">Add external protected‑cache support with CLI overrides (`--mutable-cache`, `--protected-cache`), introduce `EXTERNAL_PROTECTED_CACHE` flag, and expose a new `LIST_INSTALLED_REGIONS` command/API for fetching installed map regions. Also prepend CMake module path for custom CMake modules.</div>
+                    <div class="commit-item">Add multi‑arch support: introduce ARCH token handling in build.sh, update SDK tarball matching and error messages, and extend CI workflow to accept Docker platform input, set up QEMU/Buildx, and use the selected platforms for docker build.</div>
+                    <div class="cat cat-fix">Fixes</div>
+                    <div class="commit-item">Fix navigation lane span splitting</div>
+                    <div class="cat">Other</div>
+                    <div class="commit-item">Merge JV and landmark tile fetching into the core bridge daemon, removing separate cache directories and semaphores. Add daemon RPC methods (`request_jv_tiles` and unified tile request for landmarks), delete obsolete JV/landmark bridge code and globals, and update comments to reflect shared OCMAM caches.</div>
+                    <div class="commit-item">Revise README – replace the long, detailed description with a concise OCM Explorer overview, add clear capabilities list, architecture diagram, system requirements, and simplified installation instructions.</div>
+                    <div class="commit-item">Refactor to self-contained PyInstaller bundles with GitHub-based update checker</div>
+                    <div class="commit-item">Architecture B: modular update system (launcher + runtime + app)</div>
+                </div>
+            </details>
+
+            <details class="changelog-entry">
+                <summary>
                     <span class="ver-tag">v1.1.2</span>
                     <span class="ver-date">2026-04-16</span>
                 </summary>
